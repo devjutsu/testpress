@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import { createImportSpecifier } from 'typescript';
 
 const app = express();
@@ -13,6 +13,18 @@ app.route('/')
     .post((req: Request, res: Response) => {
         return res.send('No Sparta, but POST request');
     });
+
+function handleGetBookOne(req: Request, res: Response, next: NextFunction) {
+    console.log(req.params);
+    next();
+}
+
+function handleGetBookTwo(req: Request, res: Response, next: NextFunction) {
+    console.log(req.params);
+    return res.send(req.params);
+}
+
+app.get("/api/books/:bookId/:authorId", [handleGetBookOne, handleGetBookTwo]);
 
 // app.get('/te*t', (req :Request, res :Response) => {
 //         console.log(req.body);
