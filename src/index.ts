@@ -48,6 +48,21 @@ app.all('/api/all', (req:Request, res :Response) => {
     return res.sendStatus(200);
 });
 
+async function throwsError() {
+    throw new Error('Boom!');
+}
+
+app.get('/error', async (req, res) => {
+    try {
+        await throwsError();
+        res.send("ok");
+    } catch(error) {
+        var e = (error as Error);
+        console.log(e.message);
+        res.status(400).send(e.message);
+    }
+});
+
 app.listen(9000, () => {
     console.log('Listening at http://localhost:9000/');
 })
